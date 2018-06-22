@@ -1,0 +1,9 @@
+{
+    "name": "jonasof/laravel-route-debugger",
+    "description": "Get file and line of matched laravel route",
+    "license": "MIT",
+    "type": "project",
+    "bin": [
+        "bin/route-debug"
+    ]
+}
