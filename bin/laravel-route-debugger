@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists($autoload = __DIR__.'/../../../autoload.php')) {
+    require_once $autoload;
+} else {
+    require_once __DIR__.'/../vendor/autoload.php';
+}
+
+use Symfony\Component\Console\Application;
+
+$command = new LaravelRouteFinder\Command();
+
+$application = new Application();
+$application->add($command);
+$application->run();

@@ -2,8 +2,17 @@
     "name": "jonasof/laravel-route-debugger",
     "description": "Get file and line of matched laravel route",
     "license": "MIT",
-    "type": "project",
+    "type": "library",
+    "require": {
+        "php": ">=7.0",
+        "symfony/console": "^3.0 || ^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelRouteFinder\\": "src/"
+        }
+    },
     "bin": [
-        "bin/route-debug"
+        "bin/laravel-route-debugger"
     ]
 }
