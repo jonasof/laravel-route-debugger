@@ -1,7 +1,6 @@
 <?php
 
-require './vendor/autoload.php';
-$app = require_once './bootstrap/app.php';
+namespace LaravelRouteFinder;
 
 class DebuggerRouter extends \Illuminate\Routing\Router
 {
@@ -49,29 +48,4 @@ class DebuggerRouter extends \Illuminate\Routing\Router
 
         return $route;
     }
-}
-
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
-$request = new Illuminate\Http\Request();
-$request->server->set('REQUEST_METHOD', $argv[1]);
-$request->server->set('REQUEST_URI', $argv[2]);
-$request->enableHttpMethodParameterOverride();
-
-$app->instance('request', $request);
-$app->instance('router', $app->make(DebuggerRouter::class));
-
-$kernel->bootstrap();
-
-$result = $app->router->publicFindRoute($request);
-
-if ($result->route_file_info) {
-    $file = $result->route_file_info['file'];
-    $line = $result->route_file_info['line'];
-    $controller = $result->route_file_info['args'][1][1] ?? '';
-
-    echo "File: $file:$line \n";
-    echo "Controller: $controller \n";
-} else {
-    echo "Cannot find route info \n";
 }
