@@ -51,10 +51,14 @@ class Command extends SymfonyCommand
     function echoHuman(RouteInfo $route, $output)
     {
         $route_file_and_line = $route->getfileAndLine();
-        $controller = is_callable($route->controller) ? "Closure" : $route->controller;
+        $controller_file_and_line = $route->getControllerFileAndLine();
 
-        $output->writeln("File: $route_file_and_line");
-        $output->writeln("Controller: $controller");
+        $output->writeln("");
+        $output->writeln("<fg=green>Route File</>: <options=underscore>$route_file_and_line</>");
+        $output->writeln("");
+        $output->writeln("<fg=green>Controller</>: $route->controller");
+        $output->writeln("<fg=green>Controller File</>: $controller_file_and_line");
+        $output->writeln("");
     }
 
     function echoJson(RouteInfo $route, $output)
