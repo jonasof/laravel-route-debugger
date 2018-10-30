@@ -29,7 +29,7 @@ class RouteFinder
 
         $route_info->file = $result->route_file_info['file'];
         $route_info->line = $result->route_file_info['line'];
-        $route_info->controller = $result->action['controller'] ?? 'CLOSURE';
+        $route_info->controller = $result->getAction()['controller'] ?? 'CLOSURE';
 
         $action_parser = new ActionParser($route_info->controller);
         $route_info->controller_file = $action_parser->file;
