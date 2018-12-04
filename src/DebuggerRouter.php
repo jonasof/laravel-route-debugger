@@ -5,16 +5,6 @@ namespace LaravelRouteFinder;
 class DebuggerRouter extends \Illuminate\Routing\Router
 {
     /**
-     * @TODO autodetect imported route files
-     */
-    public $route_files = [
-        "routes/api.php",
-        "routes/console.php",
-        "routes/web.php",
-        "Http/routes.php"
-    ];
-
-    /**
      * Make findRoute public :)
      */
     public function publicFindRoute(...$params)
@@ -28,23 +18,33 @@ class DebuggerRouter extends \Illuminate\Routing\Router
      */
     protected function createRoute($methods, $uri, $action)
     {
-        $fileinfo = collect(debug_backtrace())->filter(function ($file) {
-            if (! isset($file['file'])) {
+        $backtrace = collect(debug_backtrace());
+
+        if (!is_array($methods)) {
+          $methods = [$methods];
+        }
+
+        $routeDefinitionCalledFile = $backtrace->search(function ($file) use ($methods) {
+            if (!isset($file['class']) || !isset($file['function'])) {
                 return false;
             }
 
-            foreach ($this->route_files as $route_file) {
-                if (str_contains($file['file'], $route_file)) {
-                    return true;
-                }
+            if ($file['class'] !== \Illuminate\Routing\Router::class) {
+                return false;
             }
 
-            return false;
-        })->first();
+            $possibleMethods = array_map('strtolower', $methods);
+            $possibleMethods[] = 'match';
+            $possibleMethods[] = 'any';
+
+            return in_array($file['function'], $possibleMethods);
+        });
+
+        $callerInfo = $backtrace->get($routeDefinitionCalledFile + 1);
 
         $route = parent::createRoute($methods, $uri, $action);
 
-        $route->route_file_info = $fileinfo;
+        $route->route_file_info = $callerInfo;
 
         return $route;
     }
