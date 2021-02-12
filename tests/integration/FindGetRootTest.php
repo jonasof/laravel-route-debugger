@@ -6,17 +6,20 @@ class FindGetRootTest extends PHPUnit\Framework\TestCase
     public $laravelForTestsDir = ".laravels-for-test";
 
     public $laravelVersions = [
-        '5.0' => 'routes.php:14',
         '5.1' => 'routes.php:16',
         '5.2' => 'routes.php:16',
         '5.3' => 'web.php:16',
         '5.4' => 'web.php:16',
         '5.5' => 'web.php:16',
         '5.6' => 'web.php:16',
-        '5.7' => 'web.php:16'
+        '5.7' => 'web.php:16',
+        '5.8' => 'web.php:16',
+        '6' => 'web.php:16',
+        '7' => 'web.php:18',
+        '8' => 'web.php:18',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->originalPath = __DIR__ . '/../../';
     }

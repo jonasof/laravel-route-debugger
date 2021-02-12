@@ -2,15 +2,22 @@
 
 ## Installation
 
+Install either globally:
+
 `composer global require jonasof/laravel-route-debugger`
+
+Or inside the laravel project:
+
+`composer require --dev jonasof/laravel-route-debugger`
 
 ## Usage
 
-Execute in your laravel project root directory:
+Execute in your laravel project root directory the command:
 
-`laravel-route-debugger find GET /`
+`laravel-route-debugger find GET /` for global installations
+`php artisan route-debugger:find GET /` for local installations
 
-Will return:
+That will return:
 
 ```
 File: /home/user/laravel-project/routes/web.php:16

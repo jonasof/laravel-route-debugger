@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelRouteFinder;
+namespace LaravelRouteFinder\Core;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
@@ -10,11 +10,10 @@ class RouteFinder
 {
     function __construct()
     {
-        require './vendor/autoload.php';
-        $this->app = require './bootstrap/app.php';
+        $this->app = include './bootstrap/app.php';
     }
 
-    function findRoute (string $method, string $route) : RouteInfo
+    function findRoute(string $method, string $route) : RouteInfo
     {
         $request = $this->getFakeRequest($method, $route);
         $router = $this->getRouter($request);
@@ -38,7 +37,7 @@ class RouteFinder
         return $route_info;
     }
 
-    protected function getRouter (Request $request) : DebuggerRouter
+    protected function getRouter(Request $request) : DebuggerRouter
     {
         $debug_router = $this->app->make(DebuggerRouter::class);
 
@@ -51,7 +50,7 @@ class RouteFinder
         return $debug_router;
     }
 
-    protected function getFakeRequest (string $method, string $route) : Request
+    protected function getFakeRequest(string $method, string $route) : Request
     {
         $request = new Request();
         $request->server->set('REQUEST_METHOD', $method);

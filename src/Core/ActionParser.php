@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelRouteFinder;
+namespace LaravelRouteFinder\Core;
 
 use ReflectionClass;
 
@@ -36,7 +36,7 @@ class ActionParser
         $this->line = $reflectorMethod->getStartLine();
     }
 
-    public function isClosure ()
+    public function isClosure()
     {
         return $this->file === "CLOSURE";
     }

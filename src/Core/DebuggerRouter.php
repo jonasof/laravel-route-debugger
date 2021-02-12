@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelRouteFinder;
+namespace LaravelRouteFinder\Core;
 
 class DebuggerRouter extends \Illuminate\Routing\Router
 {
@@ -21,24 +21,26 @@ class DebuggerRouter extends \Illuminate\Routing\Router
         $backtrace = collect(debug_backtrace());
 
         if (!is_array($methods)) {
-          $methods = [$methods];
+            $methods = [$methods];
         }
 
-        $routeDefinitionCalledFile = $backtrace->search(function ($file) use ($methods) {
-            if (!isset($file['class']) || !isset($file['function'])) {
-                return false;
+        $routeDefinitionCalledFile = $backtrace->search(
+            function ($file) use ($methods) {
+                if (!isset($file['class']) || !isset($file['function'])) {
+                    return false;
+                }
+
+                if ($file['class'] !== \Illuminate\Routing\Router::class) {
+                    return false;
+                }
+
+                $possibleMethods = array_map('strtolower', $methods);
+                $possibleMethods[] = 'match';
+                $possibleMethods[] = 'any';
+
+                return in_array($file['function'], $possibleMethods);
             }
-
-            if ($file['class'] !== \Illuminate\Routing\Router::class) {
-                return false;
-            }
-
-            $possibleMethods = array_map('strtolower', $methods);
-            $possibleMethods[] = 'match';
-            $possibleMethods[] = 'any';
-
-            return in_array($file['function'], $possibleMethods);
-        });
+        );
 
         $callerInfo = $backtrace->get($routeDefinitionCalledFile + 1);
 

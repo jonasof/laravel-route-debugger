@@ -7,10 +7,27 @@ if (file_exists($autoload = __DIR__.'/../../../autoload.php')) {
     require_once __DIR__.'/../vendor/autoload.php';
 }
 
-use Symfony\Component\Console\Application;
+if (!file_exists('./vendor/autoload.php')) {
+    die("Missing './vendor/autoload.php', assert this command is executed inside a valid laravel root folder");
+}
 
-$command = new LaravelRouteFinder\Command();
+if (!file_exists('./bootstrap/app.php')) {
+    die("Missing './bootstrap/app.php', assert this command is executed inside a valid laravel root folder");
+}
 
-$application = new Application();
-$application->add($command);
-$application->run();
+require './vendor/autoload.php';
+
+$app = include './bootstrap/app.php';
+$app->register(\LaravelRouteFinder\Console\ServiceProvider::class);
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+$argv = $_SERVER['argv'];
+$argv[0] = "artisan";
+$argv[1] = "route-debugger:{$argv[1]}";
+
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput($argv),
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+$kernel->terminate($input, $status);

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelRouteFinder;
+namespace LaravelRouteFinder\Core;
 
 use JsonSerializable;
 
