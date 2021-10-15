@@ -8,12 +8,7 @@ use Exception;
 
 class RouteFinder
 {
-    function __construct()
-    {
-        $this->app = include './bootstrap/app.php';
-    }
-
-    function findRoute(string $method, string $route) : RouteInfo
+    public function findRoute(string $method, string $route) : RouteInfo
     {
         $request = $this->getFakeRequest($method, $route);
         $router = $this->getRouter($request);
@@ -39,15 +34,24 @@ class RouteFinder
 
     protected function getRouter(Request $request) : DebuggerRouter
     {
-        $debug_router = $this->app->make(DebuggerRouter::class);
+        $debug_router = $this->getApp()->make(DebuggerRouter::class);
 
-        $this->app->instance('request', $request);
-        $this->app->instance('router', $debug_router);
+        $this->getApp()->instance('request', $request);
+        $this->getApp()->instance('router', $debug_router);
 
-        $kernel = $this->app->make(Kernel::class);
+        $kernel = $this->getApp()->make(Kernel::class);
         $kernel->bootstrap();
 
         return $debug_router;
+    }
+
+    protected function getApp()
+    {
+        if (!isset($this->app)) {
+            $this->app = include './bootstrap/app.php';
+        }
+
+        return $this->app;
     }
 
     protected function getFakeRequest(string $method, string $route) : Request
